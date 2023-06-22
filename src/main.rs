@@ -74,7 +74,7 @@ pub fn main() -> Result<()>{
             let w = resized.size()?.width;   
             let resized_data = resized.data_bytes_mut()?; 
             // convert bytes to tensor
-            let tensor = tch::Tensor::of_data_size(resized_data, &[h as i64, w as i64, 3], tch::Kind::Uint8);  
+            let tensor = tch::Tensor::from_data_size(resized_data, &[h as i64, w as i64, 3], tch::Kind::Uint8);  
             // normalize image tensor
             let tensor = tensor.to_kind(tch::Kind::Float) / 255;
             // carry tensor to cuda
@@ -87,8 +87,8 @@ pub fn main() -> Result<()>{
             // make prediction and time it. 
             let start = time::Instant::now();
             let probabilites = model.forward_ts(&[normalized_tensor])?.softmax(-1, tch::Kind::Float);  
-            let predicted_class = i32::from(probabilites.argmax(None, false));
-            let probability_of_class = f32::from(probabilites.max()); 
+            let predicted_class = i32::try_from(probabilites.argmax(None, false));
+            let probability_of_class = f32::try_from(probabilites.max()); 
             let duration = start.elapsed();
             println!("Predicted class: {:?}, probability of it: {:?}, prediction time: {:?}", class_map[&predicted_class], probability_of_class, duration); 
 

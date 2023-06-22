@@ -6,10 +6,13 @@ Model used in example is mobilenet_v3_small. It is trained on Cifar10 dataset fo
 /train_simple_classifier
 ```
 To run example below lines must be added under [dependencies] in Cargo.toml
+
+
 ```
-tch = "0.7.0"
-anyhow = "1"
-opencv = "0.63" 
+[dependencies]
+anyhow = "1.0.71"
+opencv = "0.82.1"
+tch = "0.13.0"
 ```
 main.rs is commented for readers to understand easily.
 
